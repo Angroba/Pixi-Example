@@ -1,4 +1,4 @@
-# A seed for Pixi + Webpack + TypeScript projects
+# BoilerPlate + Webpack + TypeScript projects
 
 A "ready to dev" environment to work with PIXI.js, webpack & typescript for web oriented games/projects. Use it as a seed to begin a new project.
 
