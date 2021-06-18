@@ -2,6 +2,9 @@
 import {
   Sprite, Texture, Resource,
 } from 'pixi.js';
+import { Utils } from './utils';
+
+const utils = new Utils()
 
 export type Entity = {
   sprite: Sprite;
@@ -9,8 +12,8 @@ export type Entity = {
   direction: 'left' | 'right';
 }
 
-export const createEntity = (texture: Texture<Resource>, x: number, y: number): Entity => {
-  const sprite = new Sprite(texture); // create sprite
+export const createEntity = (texture: any, x: number, y: number): Entity => {
+ const sprite = utils.newSprite(texture)// create sprite
   sprite.anchor.set(0.5); // center origin of sprite
   sprite.y = y; // center in canvas
   sprite.x = x;

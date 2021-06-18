@@ -1,44 +1,92 @@
 import {
-  Application, Loader, Resource, Text, Texture, Ticker,
+  Application, Loader, Resource, Text, Texture, Ticker, Sprite, Graphics
 } from 'pixi.js';
 import {
   createEntity, getNextEntityDirection, getNextEntityPosition,
 } from './app/Entity';
-
+import { StandardSprite } from './app/standart-sprite';
+import { DevTextureName } from './app/asset-loader.service';
+import heroes from '../src/assets/img/hero.png'
+import { Utils } from './app/utils';
+import { Greed } from './app/greed';
+import anime from "animejs";
 // constants
-const SIZE = 512;
-const CENTER = SIZE / 2;
+const centerWidth = window.innerWidth/ 2;
+const centerHeight = window.innerHeight/ 2;
 
 // create and append app
 const app = new Application({
-  width: SIZE,
-  height: SIZE,
-  backgroundColor: 0x1099bb, // light blue
+  width: window.innerWidth,
+  height: window.innerHeight,
+  backgroundColor: 0xFEE5AF,
   sharedTicker: true,
   sharedLoader: true,
+  antialias: true,
 });
+
 document.body.appendChild(app.view);
 const loader = Loader.shared;
 const ticker = Ticker.shared;
+const utils = new Utils();
+const newGreed = new Greed()
 
-// preload needed assets
-loader.add('hero1', '/assets/img/hero.png');
+
+function tween(){  
+
+  //mad max
+  // newGreed.x = window.innerWidth/2;
+// anime({
+//     targets: newGreed,
+//     x: [newGreed.x, window.innerWidth],
+//     duration: 3500,
+//     easing: 'linear',
+
+//     direction: "alternate",
+//     loop: true
+//   })
+//   anime({
+//     targets: newGreed,
+//     y: window.innerHeight,
+//     direction: "alternate",
+//     duration: 3500,
+//     easing: 'linear',
+//     loop: true
+//   })
+//   anime({
+//     targets: newGreed,
+//     rotation: 10,
+//     duration: 3500,
+//     easing: 'linear',
+//     loop: true,
+//   })
+
+//loading bar
+// newGreed.scale.x = 0;
+// anime({
+// targets: newGreed.scale,
+//   x: 2,
+//   duration: 3500,
+//   easing: 'linear',
+//   loop: true,
+//   direction: 'alternate',
+
+// })
+
+}
 
 // when loader is ready
 loader.load(() => {
-  // create and append FPS text
-  const fps = new Text('FPS: 0', { fill: 0xffffff });
+  const fps = new Text('FPS: 0', { fill: 0x000000 });
   app.stage.addChild(fps);
-
   // create and append hero
-  const heroTexture = loader.resources.hero1.texture as Texture<Resource>;
-  const hero = createEntity(heroTexture, CENTER, CENTER);
-  app.stage.addChild(hero.sprite);
+  const hero = utils.newSprite(heroes)
+  app.stage.addChild(hero, newGreed);
+  
 
   // animate hero each "tick": go left or right continuously
   ticker.add(() => {
     fps.text = `FPS: ${ticker.FPS.toFixed(2)}`;
-    hero.direction = getNextEntityDirection(app.view.width, hero);
-    hero.sprite.x = getNextEntityPosition(hero);
   });
 });
+
+
