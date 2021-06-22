@@ -1,13 +1,16 @@
-import { Container, Graphics } from 'pixi.js';
+import { Application, Container, Graphics, Text } from 'pixi.js';
 import crossTexture from '../assets/img/cross.png';
 import circleTexture from '../assets/img/circle.png';
 import { Utils } from './utils';
-import { Howl } from 'howler'
-import mp3 from '../assets/audio/tnt.mp3'
-import anime from 'animejs';
+import { Howl } from 'howler';
+import mp3 from '../assets/audio/tnt.mp3';
+import anime, { stagger } from 'animejs';
+import { Button} from '../app';
 
 //const creeper = sound.Sound.from("../assets/snd/tnt.mp3")
 let step = 0
+var win = false
+export { win }; 
 let array: any = []
 const utils = new Utils()
 const height = 100;
@@ -16,8 +19,25 @@ const sound = new Howl({
     src: [mp3],
     // loop:true,
 });
+
+let xWin = new Text('X win');
+
+xWin.x = 50;
+xWin.y = 300;
+xWin.alpha = 0
+utils.animeAlpha(xWin, 1, 1500, true)
+
+let yWin = new Text('Y win');
+yWin.x = 50;
+yWin.y = 300;
+yWin.alpha = 0
+utils.animeAlpha(yWin, 1, 1500, true)
+
+let winTextX = () => {}
+let winTextY = () => {}
 let isClosedFunc = () => { }
-let winFunc = () => { }
+let winFunc = () => {}
+let setFalse = () => {} 
 
 
 export class Greed extends Container {
@@ -27,9 +47,12 @@ export class Greed extends Container {
     }
     constructor() {
         super()
+        
         this.pivot.x = this.width / 2;
         this.pivot.y = this.height / 2;
+        
         this.createGreed()
+        // this.createText()
         isClosedFunc = (): void => {
             console.log('isClosed')
             for (let i = 0; i < 9; i++) {
@@ -40,15 +63,31 @@ export class Greed extends Container {
             anime({
                 targets: this,
                 alpha: 0,
-                duration: 4000,
+                duration: 8000,
                 easing: 'linear',
                 // direction: "alternate",
                 // loop: true,
             })
         }
+        winTextX = ():void => {
+            this.addChild(xWin)
+        }
+
+        winTextY = ():void => {
+            this.addChild(yWin)
+        }
+       
+        
     }
 
-
+        //     createText = () => {
+        //         let basicText = new Text('Basic text in pixi');
+        //         basicText.x = 50;
+        //         basicText.y = 300;
+        //         basicText.alpha = 0
+        //         utils.animeAlpha(basicText, 1, 1500, true)
+        //         this.addChild(basicText);
+        // }
 
     createGreed = () => {
         for (let i = 0; i < 9; i++) {
@@ -61,9 +100,20 @@ export class Greed extends Container {
             array.push(GenerateTile.name)
             this.addChild(GenerateTile)
         }
+    
     }
+    
 
-
+    bot = () => {
+        const margin = (this.height - 100 * 3) / 2;
+        this.y = margin;
+        this.x = Math.round(this.width - 150 * 5);
+     
+        const bottom = new Graphics();
+        bottom.beginFill(0, 1);
+        bottom.drawRect(0, 100 * 3 + margin, this.width, margin);
+        this.addChild(bottom)
+    }
 
 
     onClick(event: any) {
@@ -95,6 +145,7 @@ export class Greed extends Container {
 
             console.log(event.target.name)
             endGame(array)
+            
             // console.log(isClosed)
 
         }
@@ -118,46 +169,90 @@ export class Greed extends Container {
 }
 
 let soundChek = false
-function endGame(array: any) {
+function endGame(array:any) {
 
     //horizontal
     if ((array[0] === 'x') && (array[1] === 'x') && (array[2] === 'x')) {
         soundChecker()
         isClosedFunc()
         winFunc()
+        winTextX()
+        Button.interactive = true;
+        Button.buttonMode = true;
+        Button.alpha = 1
+        console.log(win);
+        
+    
+        return true 
+        
 
 
-        alert('x = win')
+        
     }
     if ((array[3] === 'x') && (array[4] === 'x') && (array[5] === 'x')) {
         soundChecker()
-        alert('x = win')
+        isClosedFunc()
+        winFunc()
+        winTextX()
+        win = true
+
+        return true 
     }
     if ((array[5] === 'x') && (array[6] === 'x') && (array[7] === 'x')) {
         soundChecker()
-        alert('x = win')
+        isClosedFunc()
+        winFunc()
+        winTextX()
+        win = true
+
+        return true 
     }
     //diag
     if ((array[0] === 'x') && (array[4] === 'x') && (array[8] === 'x')) {
         soundChecker()
-        alert('x = win')
+        isClosedFunc()
+        winFunc()
+        winTextX()
+        win = true
+
+        return true 
     }
     if ((array[2] === 'x') && (array[4] === 'x') && (array[6] === 'x')) {
         soundChecker()
-        alert('x = win')
+        isClosedFunc()
+        winFunc()
+        winTextX()
+        win = true
+
+        return true 
     }
     //vertical
     if ((array[0] === 'x') && (array[3] === 'x') && (array[6] === 'x')) {
         soundChecker()
-        alert('x = win')
+        isClosedFunc()
+        winFunc()
+        winTextX()
+        win = true
+
+        return true 
     }
     if ((array[1] === 'x') && (array[4] === 'x') && (array[7] === 'x')) {
         soundChecker()
-        alert('x = win')
+        isClosedFunc()
+        winFunc()
+        winTextX()
+        win = true
+
+        return true 
     }
     if ((array[2] === 'x') && (array[5] === 'x') && (array[8] === 'x')) {
         soundChecker()
-        alert('x = win')
+        isClosedFunc()
+        winFunc()
+        winTextX()
+        win = true
+
+        return true 
     }
 
 
@@ -168,38 +263,78 @@ function endGame(array: any) {
         soundChecker()
         isClosedFunc()
         winFunc()
-        alert('o = win')
+        winTextY()
+        win = true
+
+
+        return true 
 
 
     }
     if ((array[3] === 'o') && (array[4] === 'o') && (array[5] === 'o')) {
-        alert('o = win')
         soundChecker()
+        isClosedFunc()
+        winFunc()
+        winTextY()
+        win = true
+
+        return true 
     }
     if ((array[5] === 'o') && (array[6] === 'o') && (array[7] === 'o')) {
-        alert('o = win')
+        soundChecker()
+        isClosedFunc()
+        winFunc()
+        winTextY()
+        win = true
+
+        return true 
     }
     //diag
     if ((array[0] === 'o') && (array[4] === 'o') && (array[8] === 'o')) {
         soundChecker()
-        alert('o = win')
+        isClosedFunc()
+        winFunc()
+        winTextY()
+        win = true
+
+        return true 
     }
     if ((array[2] === 'o') && (array[4] === 'o') && (array[6] === 'o')) {
         soundChecker()
-        alert('o = win')
+        isClosedFunc()
+        winFunc()
+        winTextY()
+        win = true
+
+        return true 
     }
     //vertical
     if ((array[0] === 'o') && (array[1] === 'o') && (array[2] === 'o')) {
         soundChecker()
-        alert('o = win')
+        isClosedFunc()
+        winFunc()
+        winTextY()
+        win = true
+
+        return true 
     }
     if ((array[3] === 'o') && (array[4] === 'o') && (array[5] === 'o')) {
         soundChecker()
-        alert('o = win')
+        isClosedFunc()
+        winFunc()
+        winTextY()
+        win = true
+
+        return true 
     }
     if ((array[5] === 'o') && (array[6] === 'o') && (array[7] === 'o')) {
         soundChecker()
-        alert('o = win')
+        isClosedFunc()
+        winFunc()
+        winTextY()
+        win = true
+
+        return true 
     }
 
 }

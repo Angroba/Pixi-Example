@@ -7,8 +7,9 @@ import {
 import { StandardSprite } from './app/standart-sprite';
 import { DevTextureName } from './app/asset-loader.service';
 import heroes from '../src/assets/img/hero.png'
+import button from '../src/assets/img/button.png'
 import { Utils } from './app/utils';
-import { Greed } from './app/greed';
+import { Greed, win } from './app/greed';
 import anime from "animejs";
 
 // constants
@@ -32,6 +33,37 @@ const ticker = Ticker.shared;
 const utils = new Utils();
 const newGreed = new Greed() //создание поля из класса Greed
 newGreed.x = window.innerWidth/2;
+newGreed.y = window.innerHeight/2
+newGreed.pivot.x = newGreed.width / 2;
+newGreed.pivot.x = newGreed.height / 2;
+
+
+const Button = utils.newSprite(button)
+Button.scale.set(0.5)
+Button.anchor.set(0.5)
+Button.x = window.innerWidth/2
+Button.y = window.innerHeight/1.38
+Button.alpha = 0.1
+Button.interactive = false;
+Button.buttonMode = false;
+
+Button.on('pointerdown', onClick)
+export { Button }
+console.log(win);
+
+
+function onClick() {
+  newGreed.destroy({children:true, texture:true, baseTexture:true})
+  newGreed //создание поля из класса Greed
+  newGreed.x = window.innerWidth/2;
+  newGreed.y = window.innerHeight/2
+  newGreed.pivot.x = newGreed.width / 2;
+  newGreed.pivot.y = newGreed.height / 2;
+  app.stage.addChild(newGreed)
+  Button.interactive = false;
+  Button.buttonMode = false;
+  
+}
 
 function tween(){  
   // let a = newGreed.scale.set
@@ -112,7 +144,7 @@ loader.load(() => {
   app.stage.addChild(fps);
   // create and append hero
   const hero = utils.newSprite(heroes)
-  app.stage.addChild(hero, newGreed);
+  app.stage.addChild(hero, newGreed, Button);
   
 
   // animate hero each "tick": go left or right continuously
